@@ -74,7 +74,8 @@ if __name__ == "__main__":
 
     schema = {
         "database_id": DATABASE_ID,
-        "tables": []
+        "tables": [],
+        "relationships": []
     }
 
     try:
@@ -90,13 +91,57 @@ if __name__ == "__main__":
 
             field_list = []
             for field in fields:
-                field_list.append({
-                    "id": field["id"],
-                    "name": field["name"],
-                    "type": field["type"]
-                })
+                field_id = field["id"]
+                field_name = field["name"]
+                field_type = field["type"]
 
-                print(f"  - Field: {field['name']} | Type: {field['type']} | ID: {field['id']}")
+                field_info = {
+                    "id": field_id,
+                    "name": field_name,
+                    "type": field_type
+                }
+
+                #  If this is a link_row field, capture link metadata
+                if field_type == "link_row":
+                    # normalize link metadata defaults
+                    linked = field.get("link_row_table")
+                    target_table_id = None
+                    target_table_name = None
+
+                    # Case 1: dictionary (expected structure)
+                    if isinstance(linked, dict):
+                        target_table_id = linked.get("id")
+                        target_table_name = linked.get("name")
+
+                    # Case 2: integer returned instead of dict
+                    elif isinstance(linked, int):
+                        target_table_id = linked
+                        target_table_name = next(
+                            (t["name"] for t in tables if t["id"] == linked),
+                            f"Table_{linked}"
+                        )
+
+                    # Now check if we resolved a link
+                    if target_table_id:
+                        field_info["link"] = {
+                            "target_table_id": target_table_id,
+                            "target_table_name": target_table_name
+                        }
+
+                        schema["relationships"].append({
+                            "from_table": table_name,
+                            "from_field": field_name,
+                            "to_table": target_table_name
+                        })
+
+                        print(f"  - Field: {field_name} | Type: link_row → {target_table_name}")
+
+                    else:
+                        print(f"  - Field: {field_name} | Type: link_row (no target metadata)")
+                else:
+                    print(f"  - Field: {field_name} | Type: {field_type}")
+
+                field_list.append(field_info)
 
             schema["tables"].append({
                 "id": table_id,
@@ -104,15 +149,13 @@ if __name__ == "__main__":
                 "fields": field_list
             })
 
-            print()  # spacing
+            print()
 
-        # ------------------------------
-        #  Save to JSON file
-        # ------------------------------
+        #  Save schema to file
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             json.dump(schema, f, indent=2)
 
-        print(f"\n Schema saved to: {OUTPUT_FILE}\n")
+        print(f" Schema (including relationships) saved to: {OUTPUT_FILE}\n")
 
     except Exception as e:
         print(" Unexpected error:", type(e).__name__, "-", e)

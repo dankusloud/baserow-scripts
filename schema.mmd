@@ -1,0 +1,311 @@
+erDiagram
+
+    PipelineStages {
+        string stageName
+        int probabilityDefault
+        int opportunities
+        string currentStageValue
+    }
+
+    ActivityType {
+        string typeName
+        string notes
+        int activities
+    }
+
+    ProjectStatus {
+        string statusName
+        string notes
+        int internalProjects
+        int externalProjects
+    }
+
+    ContractStatuses {
+        string statusName
+        string notes
+        int contracts
+    }
+
+    Tags {
+        string tagName
+        string notes
+        string color
+    }
+
+    Priorities {
+        string priorityName
+        int weight
+    }
+
+    CommunicationChannels {
+        string channelName
+        string notes
+        bool active
+        int activities
+    }
+
+    Team {
+        string fullName
+        string experienceOverview
+        bool active
+        string email
+        string role
+        string title
+        string phone
+        string linkedin
+        int weeklyCapacity
+        string lastModified
+        string lastModifiedBy
+        int internalProjects
+        int tasks
+        int activities
+    }
+
+    Companies {
+        string companyName
+        string description
+        bool active
+        string companyType
+        string country
+        string website
+        int tags
+        string relationshipType
+        int owner
+        int externalProjects
+        int opportunities
+        int documents
+        int contacts
+        int contracts
+    }
+
+    Contacts {
+        string fullName
+        string lastName
+        string notes
+        bool active
+        string firstName
+        string email
+        string phone
+        string roleTitle
+        int company
+        int tags
+        string status
+        string owner
+        int activities
+        int relatedOpportunities
+        int notes
+        int companies
+    }
+
+    ExternalProjects {
+        string projectName
+        string notes
+        bool active
+        int developer
+        int projectTypes
+        int opportunities
+        int fundingRounds
+        int notes
+        int impactMetrics
+        int projectStatus
+    }
+
+    ProjectTypes {
+        string name
+        string description
+        bool active
+        int externalProjects
+        string count
+    }
+
+    Opportunities {
+        string opportunityName
+        string description
+        bool active
+        int companies
+        int relatedExternalProjects
+        int stage
+        int valueEstimate
+        string probabilityDefault
+        date expectedCloseDate
+        string owner
+        int tags
+        int contracts
+        int tasks
+        int contacts
+        int activities
+        int documents
+    }
+
+    Contracts {
+        string name
+        string notes
+        int opportunities
+        int contractStatus
+        date signedDate
+        date startDate
+        date endDate
+        string contractValue
+        int companies
+    }
+
+    FundingRounds {
+        string externalProjectName
+        string notes
+        bool active
+        int externalProject
+        string fundingType
+        int fundingAmount
+        string status
+    }
+
+    InternalProjects {
+        string internalProjectName
+        string description
+        bool active
+        int projectStatus
+        date startDate
+        date dueDate
+        int owner
+        int supportTeam
+        int tasks
+        int notes
+    }
+
+    Tasks {
+        string taskName
+        string notes
+        bool active
+        int relatedInternalProject
+        int relateOpportunity
+        int assignedTo
+        int priority
+        date dueDate
+        int status
+    }
+
+    Activities {
+        string title
+        string notes
+        bool active
+        int activityType
+        int relatedContact
+        string relatedCompany
+        int relatedOpportunity
+        int channel
+        int assignedTeamMember
+        date activityDate
+        string outcome
+        string nextStep
+    }
+
+    Notes {
+        string noteId
+        string noteContent
+        bool active
+        string createdBy
+        string lastModifiedBy
+        string lastModified
+        string createdOn
+        int relatedContacts
+        string relatedCompanies
+        string relatedOpportunities
+        int relatedExternalProjects
+        int relatedInternalProject
+    }
+
+    Documents {
+        string documentName
+        string notes
+        bool active
+        string file
+        int relatedCompany
+        int relatedOpportunity
+        string type
+    }
+
+    ImpactMetrics {
+        date reportingPeriodStart
+        string notes
+        bool active
+        date reportingPeriodEnd
+        int relatedExternalProject
+        int metricType
+        int value
+        string unit
+        bool verified
+    }
+
+    MetricTypes {
+        string name
+        string notes
+        bool active
+        int impactMetrics
+    }
+
+    PipelineStages }o--|| Opportunities : opportunities
+    ActivityType }o--|| Activities : activities
+    ProjectStatus }o--|| InternalProjects : internalProjects
+    ProjectStatus }o--|| ExternalProjects : externalProjects
+    ContractStatuses }o--|| Contracts : contracts
+    CommunicationChannels }o--|| Activities : activities
+    Team }o--|| InternalProjects : internalProjects
+    Team }o--|| Tasks : tasks
+    Team }o--|| Activities : activities
+    Companies }o--|| Tags : tags
+    Companies }o--|| Team : owner
+    Companies }o--|| ExternalProjects : externalProjects
+    Companies }o--|| Opportunities : opportunities
+    Companies }o--|| Documents : documents
+    Companies }o--|| Contacts : contacts
+    Companies }o--|| Contracts : contracts
+    Contacts }o--|| Companies : company
+    Contacts }o--|| Tags : tags
+    Contacts }o--|| Activities : activities
+    Contacts }o--|| Opportunities : relatedOpportunities
+    Contacts }o--|| Notes : notes
+    Contacts }o--|| Companies : companies
+    ExternalProjects }o--|| Companies : developer
+    ExternalProjects }o--|| ProjectTypes : projectTypes
+    ExternalProjects }o--|| Opportunities : opportunities
+    ExternalProjects }o--|| FundingRounds : fundingRounds
+    ExternalProjects }o--|| Notes : notes
+    ExternalProjects }o--|| ImpactMetrics : impactMetrics
+    ExternalProjects }o--|| ProjectStatus : projectStatus
+    ProjectTypes }o--|| ExternalProjects : externalProjects
+    Opportunities }o--|| Companies : companies
+    Opportunities }o--|| ExternalProjects : relatedExternalProjects
+    Opportunities }o--|| PipelineStages : stage
+    Opportunities }o--|| Tags : tags
+    Opportunities }o--|| Contracts : contracts
+    Opportunities }o--|| Tasks : tasks
+    Opportunities }o--|| Contacts : contacts
+    Opportunities }o--|| Activities : activities
+    Opportunities }o--|| Documents : documents
+    Contracts }o--|| Opportunities : opportunities
+    Contracts }o--|| ContractStatuses : contractStatus
+    Contracts }o--|| Companies : companies
+    FundingRounds }o--|| ExternalProjects : externalProject
+    InternalProjects }o--|| ProjectStatus : projectStatus
+    InternalProjects }o--|| Team : owner
+    InternalProjects }o--|| Team : supportTeam
+    InternalProjects }o--|| Tasks : tasks
+    InternalProjects }o--|| Notes : notes
+    Tasks }o--|| InternalProjects : relatedInternalProject
+    Tasks }o--|| Opportunities : relateOpportunity
+    Tasks }o--|| Team : assignedTo
+    Tasks }o--|| Priorities : priority
+    Tasks }o--|| ProjectStatus : status
+    Activities }o--|| ActivityType : activityType
+    Activities }o--|| Contacts : relatedContact
+    Activities }o--|| Opportunities : relatedOpportunity
+    Activities }o--|| CommunicationChannels : channel
+    Activities }o--|| Team : assignedTeamMember
+    Notes }o--|| Contacts : relatedContacts
+    Notes }o--|| ExternalProjects : relatedExternalProjects
+    Notes }o--|| InternalProjects : relatedInternalProject
+    Documents }o--|| Companies : relatedCompany
+    Documents }o--|| Opportunities : relatedOpportunity
+    ImpactMetrics }o--|| ExternalProjects : relatedExternalProject
+    ImpactMetrics }o--|| MetricTypes : metricType
+    MetricTypes }o--|| ImpactMetrics : impactMetrics
